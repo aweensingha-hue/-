@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forgive Me? 💖</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ffd6e7, #ffeef5, #ffd9f2);
+      position: relative;
+      padding: 16px;
+    }
+
+    .container {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 30px 20px;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      width: min(100%, 420px);
+      z-index: 2;
+      position: relative;
+    }
+
+    .emoji {
+      font-size: 70px;
+      margin-bottom: 10px;
+      animation: bounce 1.8s infinite;
+    }
+
+    h1 {
+      margin: 10px 0;
+      font-size: 30px;
+      color: #d63384;
+    }
+
+    p {
+      margin: 10px 0 25px;
+      color: #555;
+      font-size: 18px;
+      min-height: 28px;
+    }
+
+    .btn-wrap {
+      position: relative;
+      height: 180px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 28px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.25s ease, background 0.25s ease;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+      touch-action: manipulation;
+    }
+
+    #yesBtn {
+      background: #ff4da6;
+      color: white;
+      position: relative;
+      z-index: 3;
+    }
+
+    #yesBtn:hover {
+      transform: scale(1.06);
+    }
+
+    #noBtn {
+      background: white;
+      color: #ff4da6;
+      position: absolute;
+      left: 58%;
+      top: 0;
+      z-index: 3;
+      white-space: nowrap;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      font-size: 22px;
+      animation: floatUp linear forwards;
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .final-screen {
+      animation: popIn 0.6s ease;
+    }
+
+    .big-heart {
+      font-size: 90px;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(-110vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.7);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 26px;
+      }
+
+      p {
+        font-size: 16px;
+      }
+
+      button {
+        font-size: 18px;
+        padding: 12px 22px;
+      }
+
+      .emoji {
+        font-size: 60px;
+      }
+
+      .big-heart {
+        font-size: 72px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="mainBox">
+    <div class="emoji">🥺</div>
+    <h1>Do you forgive me?</h1>
+    <p id="message">Please think carefully... 💭</p>
+
+    <div class="btn-wrap" id="btnWrap">
+      <button id="yesBtn">Yes 💖</button>
+      <button id="noBtn">No 🙈</button>
+    </div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const message = document.getElementById("message");
+    const mainBox = document.getElementById("mainBox");
+    const btnWrap = document.getElementById("btnWrap");
+
+    const messages = [
+      "Are you sure? 🥺",
+      "Think again 😭",
+      "Please don't do this to me 💔",
+      "I'll be extra nice 😔",
+      "You are too cute to say no 😭",
+      "Last chance... 😢",
+      "Okay fine... but No is unavailable 😌"
+    ];
+
+    let count = 0;
+    let yesScale = 1;
+
+    function moveNoButton() {
+      const wrapRect = btnWrap.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const maxX = Math.max(0, wrapRect.width - btnRect.width - 10);
+      const maxY = Math.max(0, wrapRect.height - btnRect.height - 10);
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+
+      if (count < messages.length) {
+        message.textContent = messages[count];
+      } else {
+        message.textContent = "Just press Yes already 💖";
+      }
+
+      yesScale = Math.min(1.8, yesScale + 0.12);
+      yesBtn.style.transform = `scale(${yesScale})`;
+
+      count++;
+    }
+
+    noBtn.addEventListener("mouseenter", moveNoButton);
+    noBtn.addEventListener("click", moveNoButton);
+    noBtn.addEventListener("touchstart", function (e) {
+      e.preventDefault();
+      moveNoButton();
+    }, { passive: false });
+
+    yesBtn.addEventListener("click", function () {
+      mainBox.innerHTML = `
+        <div class="final-screen">
+          <div class="big-heart">💖</div>
+          <h1>Yayyyyy! 💕</h1>
+          <p>Thank you for forgiving me 🥹<br>You just made my whole day better ✨</p>
+        </div>
+      `;
+      createHearts(35);
+    });
+
+    function createHearts(num) {
+      for (let i = 0; i < num; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = ["💖", "💗", "💘", "💕", "💞"][Math.floor(Math.random() * 5)];
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+        heart.style.fontSize = (18 + Math.random() * 26) + "px";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 6000);
+      }
+    }
+
+    const floatingHearts = setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = ["💖", "💕", "💗"][Math.floor(Math.random() * 3)];
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (4 + Math.random() * 2) + "s";
+      heart.style.fontSize = (16 + Math.random() * 18) + "px";
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 6000);
+    }, 700);
+
+    yesBtn.addEventListener("click", () => clearInterval(floatingHearts), { once: true });
+  </script>
+
+</body>
+</html>
